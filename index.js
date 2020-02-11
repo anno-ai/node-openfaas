@@ -13,7 +13,7 @@ class OpenFaas{
      * @param {string} params - the query string or url to pass as request body
      * @param {object} config - http request configuration 
      */
-    call = async (functionName, params, config = { method: 'POST' }) => { // isJson: true, isBinaryResponse: false
+    call = (functionName, params, config = { method: 'POST' }) => { // isJson: true, isBinaryResponse: false
         return new Promise((resolve, reject) => {
             const funcPath = path.join('/function', functionName)
             config.body = params
