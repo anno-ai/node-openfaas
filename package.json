@@ -1,0 +1,23 @@
+{
+  "name": "openfaas-wrapper",
+  "version": "1.0.0",
+  "description": "A wrapper package to access openfaas functions",
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "path": "^0.12.7"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anno-ai/node-openfaas-wrapper.git"
+  },
+  "author": "Andy Hayes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anno-ai/node-openfaas-wrapper/issues"
+  },
+  "homepage": "https://github.com/anno-ai/node-openfaas-wrapper#readme"
+}
