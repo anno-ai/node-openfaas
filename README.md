@@ -1,5 +1,5 @@
 # node-openfaas
-A wrapper function to access the openfaas api from node
+`A helper method used to call openfaas functions.`
 
 # usage
 ```
