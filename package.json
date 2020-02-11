@@ -1,7 +1,7 @@
 {
-  "name": "openfaas-wrapper",
+  "name": "node-openfaas",
   "version": "1.0.0",
-  "description": "A wrapper package to access openfaas functions",
+  "description": "A helper method used to call openfaas functions.",
   "dependencies": {
     "node-fetch": "^2.6.0",
     "path": "^0.12.7"
