@@ -1,5 +1,5 @@
 # node-openfaas
-`A helper method used to call openfaas functions.`
+A helper method used to call openfaas functions.
 
 # usage
 ```
