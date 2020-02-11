@@ -14,16 +14,18 @@ class OpenFaas{
      * @param {object} config - http request configuration 
      */
     call = async (functionName, params, config = { method: 'POST' }) => { // isJson: true, isBinaryResponse: false
-        try {
+        return new Promise((resolve, reject) => {
             const funcPath = path.join('/function', functionName)
             config.body = params
             config.encoding = (config.isBinaryResponse ? null : 'utf8')
-            const response = await fetch(this.provider + funcPath, config)
-            const json = await response.json()
-            return json
-        } catch (e) {
-            console.log(e)
-        }
+            fetch(this.provider + funcPath, config)
+                .then((res) => {
+                    return resolve(res.json())
+                })
+                .catch((e) => {
+                    return reject(e)
+                })
+        })
     }
 }
 
