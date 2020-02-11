@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 const path = require('path')
 
-class OpenFaasWrapper {
+class OpenFaas{
 
     constructor (provider) {
         this.provider = provider
@@ -13,18 +13,18 @@ class OpenFaasWrapper {
      * @param {string} params - the query string or url to pass as request body
      * @param {object} config - http request configuration 
      */
-    call = (functionName, params, config = { method: 'POST' }) => { // isJson: true, isBinaryResponse: false
-        const funcPath = path.join('/function', functionName)
-        config.body = params
-        config.encoding = (config.isBinaryResponse ? null : 'utf8')
-        fetch(this.provider + funcPath, config)
-            .then((res) => {
-                return res.json()
-            })
-            .catch((e) => {
-                console.log('something went wrong: ', e)
-            })
+    call = async (functionName, params, config = { method: 'POST' }) => { // isJson: true, isBinaryResponse: false
+        try {
+            const funcPath = path.join('/function', functionName)
+            config.body = params
+            config.encoding = (config.isBinaryResponse ? null : 'utf8')
+            const response = await fetch(this.provider + funcPath, config)
+            const json = await response.json()
+            return json
+        } catch (e) {
+            console.log(e)
+        }
     }
 }
 
-module.exports = OpenFaasWrapper
+module.exports = OpenFaas
