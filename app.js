@@ -1,4 +1,6 @@
-const OpenFaas = require('@annoai/node-openfaas')
+const OpenFaas = require('./index.js')
 const faas = new OpenFaas('http://localhost:8080')
-const res =  await faas.call('functionName', 'https://website/image.jpg')
-console.log(res)
+faas.call('functionName', { param: 1})
+  .then((res) => {
+    console.log(res)
+  })

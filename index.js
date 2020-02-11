@@ -4,7 +4,7 @@ const path = require('path')
 class OpenFaas{
 
     constructor (provider) {
-        this.provider = provider
+        this.provider = provider || 'http://localhost:8080'
     }
 
     /**
@@ -13,7 +13,7 @@ class OpenFaas{
      * @param {string} params - the query string or url to pass as request body
      * @param {object} config - http request configuration 
      */
-    call = (functionName, params, config = { method: 'POST' }) => { // isJson: true, isBinaryResponse: false
+    call (functionName, params, config = { method: 'POST' }) {
       const funcPath = path.join('/function', functionName)
       config.body = params
       config.encoding = (config.isBinaryResponse ? null : 'utf8')
