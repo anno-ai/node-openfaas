@@ -1,4 +1,4 @@
-# node-openfaas-wrapper
+# node-openfaas
 A wrapper function to access the openfaas api from node
 
 # usage
