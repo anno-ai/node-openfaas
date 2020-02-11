@@ -1,5 +1,5 @@
 {
-  "name": "node-openfaas",
+  "name": "annoai@node-openfaas",
   "version": "1.0.0",
   "description": "A helper method used to call openfaas functions.",
   "dependencies": {
