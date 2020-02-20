@@ -14,3 +14,12 @@ faas.call('functionName', data, { type: 'application/json' })
   .catch((err) => {
     console.log(err)
   })
+
+
+faas.testRetry('functionName', 5)
+  .then((res) => {
+    console.log(res)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
