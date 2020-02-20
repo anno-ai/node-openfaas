@@ -38,7 +38,7 @@ class OpenFaas{
             if (res.ok || res.status === 401) {
                 return res;
             } else {
-                throw new Error(res.status + ' ' + res.statusText);
+                throw new Error(res.status + ' function ' + functionName + ' ' + res.statusText);
             }
         })
     }
