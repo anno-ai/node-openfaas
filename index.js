@@ -36,7 +36,6 @@ class OpenFaas{
       return fetch(url, { method: 'GET', timeout: 500 })
         .then((res) => {
             if (res.ok || res.status === 401) {
-                console.log('test passed')
                 return res;
             } else {
                 throw new Error(res.status + ' ' + res.statusText);
@@ -44,8 +43,8 @@ class OpenFaas{
         })
     }
 
-    async testRetry (functionName, numRetries) {
-      return await pRetry(() => this.test(functionName), { retries: numRetries })
+    testRetry (functionName, numRetries) {
+      return pRetry(() => this.test(functionName), { retries: numRetries })
     }
 }
 
