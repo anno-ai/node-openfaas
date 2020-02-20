@@ -1,6 +1,6 @@
 const OpenFaas = require('./index.js')
 
-const faas = new OpenFaas('http://localhost:8080/')
+const faas = new OpenFaas('http://127.0.0.1:8080/')
 
 const data = JSON.stringify({ data: '' })
 
