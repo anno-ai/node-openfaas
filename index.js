@@ -43,6 +43,14 @@ class OpenFaas{
       }, config)
 
       return axios(config)
+        .then((res) => {
+          const statusCode = get(res, 'data.statusCode')
+          const message = get(res, 'data.message')
+          if (statusCode && message) {
+            throw new OpenFaasError(statusCode, message, res)
+          }
+          return res
+        })
     }
 
     test (functionName, params = {}, config = {}) {
@@ -58,14 +66,6 @@ class OpenFaas{
       }, config)
 
       return axios(config)
-        .then((res) => {
-          const statusCode = get(res, 'data.statusCode')
-          const message = get(res, 'data.message')
-          if (statusCode && message) {
-            throw new OpenFaasError(statusCode, message, res)
-          }
-          return res
-        })
     }
 
     testRetry (functionName, params = {}, config = {}, numRetries = 3) {
