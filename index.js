@@ -1,7 +1,22 @@
-const fetch = require('node-fetch')
+const axios = require('axios')
 const urljoin = require('url-join');
+const get = require('lodash/get')
 const merge = require('lodash/merge')
 const pRetry = require('p-retry')
+
+class OpenFaasError extends Error {
+  constructor (statusCode, message, response) {
+    super(message)
+    // Set the error name as the class name
+    this.name = this.constructor.name
+    this.statusCode = statusCode
+    this.response = response
+    // This clips the constructor invocation from the stack trace.
+    // It's not absolutely essential, but it does make the stack trace a little nicer.
+    Error.captureStackTrace(this, this.constructor)
+  }
+}
+
 
 class OpenFaas{
 
@@ -15,36 +30,46 @@ class OpenFaas{
     /**
      * function to execute an openfaas function held at the provider location
      * @param {string} functionName - the name of the function
-     * @param {string} params - the query string or url to pass as request body
-     * @param {object} config - http request configuration 
+     * @param {string} params - the object to pass as request body
+     * @param {object} config - request override configuration 
      */
-    call (functionName, params, config = {}) {
+    call (functionName, params = {}, config = {}) {
       config = merge({}, {
-        body: params,
-        encoding: config.isBinaryResponse ? null : 'utf8',
-        headers: { 'Content-Type': (config.type ? config.type : 'text/plain') },
-        method: 'POST'
+        data: params,
+        headers: { 'Content-Type': (config.type ? config.type : 'application/json') },
+        url: urljoin(this.provider, 'function', functionName ),
+        method: 'POST',
+        timeout: 60000
       }, config)
 
-      const url = urljoin(this.provider, 'function', functionName )
-
-      return fetch(url, config)
+      return axios(config)
     }
 
-    test (functionName) {
-      const url = urljoin(this.provider, 'function', functionName )
-      return fetch(url, { method: 'GET', timeout: 500 })
+    test (functionName, params = {}, config = {}) {
+      config = merge({}, {
+        data: params,
+        headers: { 'Content-Type': (config.type ? config.type : 'application/json') },
+        url: urljoin(this.provider, 'function', functionName ),
+        method: 'GET',
+        timeout: 500,
+        validateStatus: function (status) {
+          return (status >= 200 && status < 300)
+        }
+      }, config)
+
+      return axios(config)
         .then((res) => {
-            if (res.ok || res.status === 401) {
-                return res;
-            } else {
-                throw new Error(res.status + ' function ' + functionName + ' ' + res.statusText);
-            }
+          const statusCode = get(res, 'data.statusCode')
+          const message = get(res, 'data.message')
+          if (statusCode && message) {
+            throw new OpenFaasError(statusCode, message, res)
+          }
+          return res
         })
     }
 
-    testRetry (functionName, numRetries) {
-      return pRetry(() => this.test(functionName), { retries: numRetries })
+    testRetry (functionName, params = {}, config = {}, numRetries = 3) {
+      return pRetry(() => this.test(functionName, params, config), { retries: numRetries })
     }
 }
 
