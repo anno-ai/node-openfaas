@@ -1,6 +1,6 @@
 {
   "name": "@annoai/node-openfaas",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A helper method used to call openfaas functions.",
   "dependencies": {
     "axios": "^0.19.2",
