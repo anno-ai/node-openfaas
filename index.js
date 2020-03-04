@@ -17,7 +17,6 @@ class OpenFaasError extends Error {
   }
 }
 
-
 class OpenFaas{
 
     constructor (provider) {
@@ -59,13 +58,29 @@ class OpenFaas{
         headers: { 'Content-Type': (config.type ? config.type : 'application/json') },
         url: urljoin(this.provider, 'function', functionName ),
         method: 'GET',
-        timeout: 500,
+        timeout: 500, // Request timeout
         validateStatus: function (status) {
           return (status >= 200 && status < 300)
         }
       }, config)
 
-      return axios(config)
+      // Set an axios cancel token
+      const CancelToken = axios.CancelToken;
+      const source = CancelToken.source();
+
+      // Cancel the request if more than timeout
+      setTimeout(() => {
+        source.cancel();
+      }, config.timeout + 1000);
+
+      return axios({...config, ...{ cancelToken: source.token }})
+      .catch(err => {
+        // Catch for if the server does not respond (longer than request timeout)
+        if(axios.isCancel(err)) {
+          throw new Error(`Unable to establish a connection. Are you connected to the right network? Check: ${config.url}`)
+        }
+        throw err
+      })
     }
 
     testRetry (functionName, params = {}, config = {}, numRetries = 3) {
@@ -74,3 +89,4 @@ class OpenFaas{
 }
 
 module.exports = OpenFaas
+
