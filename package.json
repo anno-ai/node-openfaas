@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anno-ai/node-openfaas-wrapper.git"
+    "url": "git+https://github.com/anno-ai/node-openfaas.git"
   },
   "author": "Andy Hayes",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anno-ai/node-openfaas-wrapper/issues"
+    "url": "https://github.com/anno-ai/node-openfaas/issues"
   },
-  "homepage": "https://github.com/anno-ai/node-openfaas-wrapper#readme"
+  "homepage": "https://github.com/anno-ai/node-openfaas#readme"
 }
